@@ -1,0 +1,88 @@
+<html class="font">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-500">
+        <div
+            x-data="{ todos: [{name: 'Созвониться с коллегами в 20:00', description: 'Необходимо созвониться с коллегами'}], userInput: '', userInput2: ''}"
+            class="flex flex-col justify-start items-center h-full"
+        >
+            <h1 class="text-4xl text-gray-100 m-10 font-black">
+                Поля для ввода
+            </h1>
+            <form x-on:submit.prevent class="flex flex-col gap-4 mb-16">
+                <input
+                    x-model="userInput"
+                    class="bg-gray-600 text-gray-100 placeholder-slate-400 pl-4 h-12 w-72 rounded-full border-2 border-gray-300 focus:outline-none"
+                    placeholder="Введите задачи"
+                    type="text"
+                />
+                <input
+                    x-model="userInput2"
+                    class="bg-gray-600 text-gray-100 placeholder-slate-400 pl-4 h-12 w-72 rounded-full border-2 border-gray-300 focus:outline-none"
+                    placeholder="Введите описание задачи"
+                    type="text"
+                />
+                <button
+                    x-on:click="if(userInput.trim( ).length) {todos.push({name: userInput, description: userInput2, completed: false})}; userInput = '', userInput2 = ''"
+                    class="bg-gray-700 text-white h-12 w-52 rounded-full border-gray-100 border-2"
+                >
+                    Добавить задачу
+                </button>
+            </form>
+
+            <ul class="w-2/5 gap-4" x-transition>
+                <h1 class="text-4xl text-gray-100 font-black mb-10 text-center">
+                    Задачи
+                </h1>
+                <template x-for="todo in todos">
+                    <li x-data="{open: false}" class="flex-col items-center justify-center mb-8 p-6 border-4">
+                        <div
+                            class="flex items-center gap-20 justify-between"
+                        >
+                            <div class="flex items-center">
+                                <span
+                                    x-text="todo.name"
+                                    class="text-white text-3xl"
+                                ></span>
+                            </div>
+
+                            <button
+                                @click="open !== true ? open = true : open = false"
+                                class="w-10"
+                            >
+                                <span
+                                    class="text-white text-white text-3xl"
+                                    x-text="open ? '-' : '+'"
+                                ></span>
+                            </button>
+                        </div>
+
+                        <div
+                            x-show="open"
+                            x-transition
+                            x-transition:enter.duration.300ms
+                            x-transition:leave.duration.200ms
+                            class="flex flex-col gap-6"
+                        >
+                            <span
+                                x-text="todo.description"
+                                class="text-xl text-gray-300"
+                            ></span>
+                            <button
+                                @click="todos = todos.filter((currentTodo) => currentTodo != todo)"
+                                class="bg-white w-36 h-8 rounded"
+                            >
+                                удалить задачу
+                            </button>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </div>
+
+        <script src="public/script.js"></script>
+    </body>
+</html>
